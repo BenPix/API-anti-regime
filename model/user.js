@@ -144,7 +144,25 @@ class User {
     }
 
     var query = connection.query(
-      "SELECT id, poids, DATE_FORMAT(date, '%d/%m/%Y') as date FROM pesee WHERE user_id = ? ORDER BY date DESC",
+      "SELECT id, poids, DATE_FORMAT(date, '%d/%m/%Y') as date FROM pesee WHERE user_id = ? ORDER BY pesee.date DESC",
+      [user_id],
+      function (error, results) {
+        if (error) throw error;
+        callback(results);
+        console.log(query.sql);
+      }
+    );
+  }
+
+  static findWeighingsForGraph(user_id, callback) {
+    if (!user_id) {
+      const error = new Error("Bad request");
+      error.status = 400;
+      throw error;
+    }
+
+    var query = connection.query(
+      "SELECT poids, date FROM pesee WHERE user_id = ? ORDER BY date ASC",
       [user_id],
       function (error, results) {
         if (error) throw error;

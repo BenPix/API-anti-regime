@@ -113,6 +113,17 @@ app.get("/api/weighings", (req, res, next) => {
   }
 });
 
+app.get("/api/weighings-for-graph", (req, res, next) => {
+  let User = require("./model/user");
+  try {
+    User.findWeighingsForGraph(req.query.userId, function (results) {
+      res.status(200).json({ results });
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.delete("/api/weighings", (req, res, next) => {
   let User = require("./model/user");
   try {
