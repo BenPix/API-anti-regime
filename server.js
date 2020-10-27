@@ -82,7 +82,18 @@ app.post("/api/user", (req, res, next) => {
   try {
     let User = require("./model/user");
     User.create(req.body.user, function (result) {
-      res.status(201).json({ message: "Utilisateur créé avec succès " });
+      res.status(201).json({ message: "Utilisateur créé avec succès" });
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/user", (req, res, next) => {
+  try {
+    let User = require("./model/user");
+    User.update(req.body.user, function (result) {
+      res.status(201).json({ message: "Utilisateur modifié avec succès" });
     });
   } catch (error) {
     next(error);

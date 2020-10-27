@@ -47,6 +47,42 @@ class User {
     );
   }
 
+  static update(user, callback) {
+    if (
+      !user.id ||
+      !user.prenom
+    ) {
+      const error = new Error("Bad request");
+      error.status = 400;
+      throw error;
+    }
+
+    let queryString = "UPDATE user SET password = ?, prenom = ? WHERE id = ?";
+    let queryParams = [
+      user.password,
+      user.prenom,
+      user.id,
+    ];
+    
+    if (user.password === "") {
+      queryString = "UPDATE user SET prenom = ? WHERE id = ?";
+      queryParams = [
+        user.prenom,
+        user.id,
+      ];
+    }
+
+    connection.query(
+      queryString,
+      queryParams,
+      function (error, result) {
+        if (error) throw error;
+
+        callback(result);
+      }
+    );
+  }
+
   static find(id, callback) {
     if (!id) {
       const error = new Error("Bad request");
